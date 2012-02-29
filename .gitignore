@@ -13,8 +13,8 @@ fakephong
 build/
 *.xcodeproj/*
 !project.pbxproj
-*.xcuserdatad
-DerivedData
+*.xcuserdatad/
+DerivedData/
 #
 # for Windows
 #
@@ -22,6 +22,7 @@ Debug/
 ipch/
 Thumbs.db
 *.obj
+!cross.obj
 *.dll
 !freeglut.dll
 !glew32.dll

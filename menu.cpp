@@ -13,7 +13,7 @@ static int shape = 0;  /* 表示形状 */
 /*
 ** メニューエントリの更新 （選択項目の頭に c を付ける)
 */
-static void markEntry(int i, char c, char *s)
+static void markEntry(int i, char c, const char *s)
 {
   char buffer[128], *p = buffer;
   int n = sizeof(buffer) / sizeof(char) - 1;
@@ -33,7 +33,7 @@ static void markEntry(int i, char c, char *s)
 /*
 ** 図形のメニュー項目
 */
-static char *shapeName[] = {
+static const char *shapeName[] = {
   "*Teapot",
   " Cube",
   " Sphere",
