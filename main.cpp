@@ -23,16 +23,32 @@
 #define TEXHEIGHT 256                               /* テクスチャの高さ */
 
 /*
+** 色設定
+*/
+#define COLOR 1
+
+/*
 ** 光源
 */
+#if COLOR
+static const GLfloat lpos[] = { 0.4, 0.6, 2.0, 0.0 };   /* 位置　　　　 */
+static const GLfloat lcol[] = { 1.0, 1.0, 1.0, 1.0 };   /* 直接光強度　 */
+static const GLfloat lamb[] = { 0.1, 0.1, 0.1, 1.0 };   /* 環境光強度　 */
+#else
 static const GLfloat lpos[] = { 0.0, 0.0, 1.0, 0.0 };   /* 位置　　　　 */
 static const GLfloat lcol[] = { 1.0, 1.0, 1.0, 1.0 };   /* 直接光強度　 */
 static const GLfloat lamb[] = { 0.2, 0.2, 0.2, 1.0 };   /* 環境光強度　 */
+#endif
 
 /*
 ** マテリアル
 */
+#if COLOR
+static const GLfloat kdiff[] = { 0.4, 0.4, 0.3, 1.0 };  /* 拡散反射係数 */
+#else
 static const GLfloat kdiff[] = { 0.0, 0.1, 0.3, 1.0 };  /* 拡散反射係数 */
+#endif
+
 static const GLfloat kspec[] = { 0.6, 0.6, 0.6, 1.0 };  /* 鏡面反射係数 */
 static const GLfloat kshi = 20.0;                       /* 輝き係数　　 */
 
@@ -141,7 +157,11 @@ static void init(void)
   glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
   
   /* その他の初期設定 */
+#if COLOR
+  glClearColor(0.2, 0.6, 0.2, 0.0);
+#else
   glClearColor(0.3, 0.3, 1.0, 0.0);
+#endif
   glEnable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
 }
