@@ -1,9 +1,9 @@
-/*
-** ƒƒjƒ…[‚Ìì¬
+ï»¿/*
+** ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ä½œæˆ
 */
 extern void menu(void);
 
 /*
-**}Œ`•\¦
+**å›³å½¢è¡¨ç¤º
 */
 extern void showShape(void);
