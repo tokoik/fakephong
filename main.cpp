@@ -31,26 +31,26 @@
 ** 光源
 */
 #if COLOR
-static const GLfloat lpos[] = { 0.4, 0.6, 2.0, 0.0 };   /* 位置　　　　 */
-static const GLfloat lcol[] = { 1.0, 1.0, 1.0, 1.0 };   /* 直接光強度　 */
-static const GLfloat lamb[] = { 0.1, 0.1, 0.1, 1.0 };   /* 環境光強度　 */
+static const GLfloat lpos[] = { 0.4f, 0.6f, 2.0f, 0.0f };   /* 位置　　　　 */
+static const GLfloat lcol[] = { 1.0f, 1.0f, 1.0f, 1.0f };   /* 直接光強度　 */
+static const GLfloat lamb[] = { 0.1f, 0.1f, 0.1f, 1.0f };   /* 環境光強度　 */
 #else
-static const GLfloat lpos[] = { 0.0, 0.0, 1.0, 0.0 };   /* 位置　　　　 */
-static const GLfloat lcol[] = { 1.0, 1.0, 1.0, 1.0 };   /* 直接光強度　 */
-static const GLfloat lamb[] = { 0.2, 0.2, 0.2, 1.0 };   /* 環境光強度　 */
+static const GLfloat lpos[] = { 0.0f, 0.0f, 1.0f, 0.0f };   /* 位置　　　　 */
+static const GLfloat lcol[] = { 1.0f, 1.0f, 1.0f, 1.0f };   /* 直接光強度　 */
+static const GLfloat lamb[] = { 0.2f, 0.2f, 0.2f, 1.0f };   /* 環境光強度　 */
 #endif
 
 /*
 ** マテリアル
 */
 #if COLOR
-static const GLfloat kdiff[] = { 0.4, 0.4, 0.3, 1.0 };  /* 拡散反射係数 */
+static const GLfloat kdiff[] = { 0.4f, 0.4f, 0.3f, 1.0f };  /* 拡散反射係数 */
 #else
-static const GLfloat kdiff[] = { 0.0, 0.1, 0.3, 1.0 };  /* 拡散反射係数 */
+static const GLfloat kdiff[] = { 0.0f, 0.1f, 0.3f, 1.0f };  /* 拡散反射係数 */
 #endif
 
-static const GLfloat kspec[] = { 0.6, 0.6, 0.6, 1.0 };  /* 鏡面反射係数 */
-static const GLfloat kshi = 20.0;                       /* 輝き係数　　 */
+static const GLfloat kspec[] = { 0.6f, 0.6f, 0.6f, 1.0f };  /* 鏡面反射係数 */
+static const GLfloat kshi = 20.0f;                          /* 輝き係数　　 */
 
 /*
 ** テクスチャの作成
@@ -59,12 +59,12 @@ static void makeTexture(unsigned char *t, int w, int h)
 {
   /* 光線ベクトルと視線ベクトルの中間ベクトル (hx, hy, hz) を求める */
   float l2 = lpos[0] * lpos[0] + lpos[1] * lpos[1] + lpos[2] * lpos[2];
-  float l = sqrt(l2);
+  float l = sqrtf(l2);
   float hx = lpos[0], hy = lpos[1], hz = lpos[2] + l;
   
   l2 += lpos[2] * l;
   if (l2 > 0.0) {
-    double m = sqrt(l2 + l2);
+    float m = sqrtf(l2 + l2);
     hx /= m;
     hy /= m;
     hz /= m;
@@ -78,19 +78,19 @@ static void makeTexture(unsigned char *t, int w, int h)
     for (int x = 0; x < w; ++x) {
       float nx = (float)(x + x - w) / (float)w;
       float nx2 = nx * nx;
-      float nz2 = 1.0 - nx2 - ny2;
+      float nz2 = 1.0f - nx2 - ny2;
       
       /* nz2 >= 0 なら「円内」 */
-      if (nz2 >= 0.0) {
-        float nz = sqrt(nz2);
+      if (nz2 >= 0.0f) {
+        float nz = sqrtf(nz2);
 #define MODEL 0
 #if MODEL == 0
-        float rs = pow(hx * nx + hy * ny + hz * nz, kshi) * 255.0;
+        float rs = powf(hx * nx + hy * ny + hz * nz, kshi) * 255.0f;
 #elif MODEL == 1
-        float rs = (hx * nx + hy * ny + hz * nz > 0.97) ? 255.0 : 0.0;
+        float rs = (hx * nx + hy * ny + hz * nz > 0.97f) ? 255.0f : 0.0f;
 #elif MODEL == 2
         float rs = hx * nx - hy * ny - hz * nz;
-				rs = pow(1.0 - rs * rs, 5.0) * 255.0;
+				rs = pow(1.0f - rs * rs, 5.0) * 255.0f;
 #endif
         *(t++) = (GLubyte)(kspec[0] * rs * lcol[0]);
         *(t++) = (GLubyte)(kspec[1] * rs * lcol[1]);
@@ -158,9 +158,9 @@ static void init(void)
   
   /* その他の初期設定 */
 #if COLOR
-  glClearColor(0.2, 0.6, 0.2, 0.0);
+  glClearColor(0.2f, 0.6f, 0.2f, 0.0f);
 #else
-  glClearColor(0.3, 0.3, 1.0, 0.0);
+  glClearColor(0.3f, 0.3f, 1.0f, 0.0f);
 #endif
   glEnable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
