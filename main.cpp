@@ -16,11 +16,11 @@
 #include <string.h>
 #include <math.h>
 
-/* メニュー関連の関数の宣言 */
-#include "menu.h"
-
 /* トラックボール処理用関数の宣言 */
 #include "trackball.h"
+
+/* メニュー関連の関数の宣言 */
+#include "menu.h"
 
 /*
 ** テクスチャサイズ
@@ -67,7 +67,7 @@ static void makeTexture(unsigned char *t, int w, int h)
   float l2 = lpos[0] * lpos[0] + lpos[1] * lpos[1] + lpos[2] * lpos[2];
   float l = sqrtf(l2);
   float hx = lpos[0], hy = lpos[1], hz = lpos[2] + l;
-  
+
   l2 += lpos[2] * l;
   if (l2 > 0.0) {
     float m = sqrtf(l2 + l2);
@@ -80,12 +80,12 @@ static void makeTexture(unsigned char *t, int w, int h)
   for (int y = 0; y < h; ++y) {
     float ny = (float)(y + y - h) / (float)h;
     float ny2 = ny * ny;
-    
+
     for (int x = 0; x < w; ++x) {
       float nx = (float)(x + x - w) / (float)w;
       float nx2 = nx * nx;
       float nz2 = 1.0f - nx2 - ny2;
-      
+
       /* nz2 >= 0 なら「円内」 */
       if (nz2 >= 0.0f) {
         float nz = sqrtf(nz2);
@@ -132,15 +132,15 @@ static void init(void)
 
   /* テクスチャ画像はバイト単位に詰め込まれている */
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  
+
   /* テクスチャの割り当て */
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXWIDTH, TEXHEIGHT, 0,
     GL_RGB, GL_UNSIGNED_BYTE, texture);
-  
+
   /* テクスチャを拡大・縮小する方法の指定 */
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  
+
   /* テクスチャの繰り返し方法の指定 */
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -148,10 +148,10 @@ static void init(void)
   /* スフィアマッピングする */
   glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
   glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-  
+
   /* テクスチャ環境（ポリゴンの陰影に加算する） */
   glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
-  
+
   /* 光源の初期設定 */
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
@@ -161,7 +161,7 @@ static void init(void)
 
   /* 拡散反射光と鏡面反射光を別々に補間する */
   glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
-  
+
   /* その他の初期設定 */
 #if COLOR
   glClearColor(0.2f, 0.6f, 0.2f, 0.0f);
@@ -179,11 +179,11 @@ static void scene(void)
 {
   /* 鏡面反射成分をテクスチャマッピングするときの鏡面反射係数 */
   static const GLfloat knone[] = { 0.0, 0.0, 0.0, 1.0 };
-  
+
   /* 材質の設定 */
   glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, kdiff);
   glMaterialf(GL_FRONT, GL_SHININESS, kshi);
-  
+
   /* テクスチャをマッピングせずに図形を描く */
   glMaterialfv(GL_FRONT, GL_SPECULAR, kspec);
   glPushMatrix();
@@ -207,32 +207,41 @@ static void scene(void)
   glDisable(GL_TEXTURE_2D);
 }
 
-
 /****************************
 ** GLUT のコールバック関数 **
 ****************************/
 
+/* アニメーションのサイクル */
+#define FRAMES 360
+
 static void display(void)
 {
-  /* モデルビュー変換行列の設定 */
+  /* フレーム数をカウントして時間として使う */
+  static int frame = 0;                      /* フレーム数　　　　　　　 */
+  double t = (double)frame / (double)FRAMES; /* 時間とともに 0→1 に変化 */
+
+  /* アニメーションのサイクルごとにフレーム数をリセットする */
+  if (++frame >= FRAMES) frame = 0;
+
+	/* モデルビュー変換行列の設定 */
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  
+
   /* 画面クリア */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  
+
   /* モデルビュー変換行列の初期化 */
   glLoadIdentity();
-  
+
   /* 光源の位置を設定 */
   glLightfv(GL_LIGHT0, GL_POSITION, lpos);
-  
+
   /* 視点の移動 */
   glTranslated(0.0, 0.0, -7.5);
-  
+
   /* シーンの描画 */
   scene();
-  
+
   /* ダブルバッファリング */
   glutSwapBuffers();
 }
@@ -241,13 +250,13 @@ static void resize(int w, int h)
 {
   /* トラックボールする範囲 */
   trackballRegion(w, h);
-  
+
   /* ウィンドウ全体をビューポートにする */
   glViewport(0, 0, w, h);
-  
+
   /* 透視変換行列の指定 */
   glMatrixMode(GL_PROJECTION);
-  
+
   /* 透視変換行列の初期化 */
   glLoadIdentity();
   gluPerspective(30.0, (GLdouble)w / (GLdouble)h, 1.0, 100.0);
