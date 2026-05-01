@@ -1,16 +1,22 @@
-﻿#include <stdio.h>
+﻿#if defined(__APPLE__) || defined(MACOSX)
+#  define GL_SILENCE_DEPRECATION
+#  include <GLUT/glut.h>
+#  include <OpenGL/glext.h>
+#else
+#  if defined(_WIN32)
+//#    pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
+#    define _USE_MATH_DEFINES
+#    define _CRT_SECURE_NO_WARNINGS
+#  endif
+#  include <GL/glut.h>
+#  include <GL/glext.h>
+#endif
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#if defined(_WIN32)
-//#  pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#  include <GL/glut.h>
-#  include "glext.h"
-#elif defined(__APPLE__) || defined(MACOSX)
-#  include <GLUT/glut.h>
-#else
-#  include <GL/glut.h>
-#endif
+
+/* メニュー関連の関数の宣言 */
 #include "menu.h"
 
 /* トラックボール処理用関数の宣言 */
