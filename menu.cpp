@@ -50,7 +50,7 @@ static const char *shapeName[] = {
 /*
 ** 図形表示
 */
-void showShape(void)
+void showShape()
 {
   switch (shape) {
   case 0:
@@ -95,7 +95,7 @@ static void mainMenu(int m)
 /*
 ** メニュー作成
 */
-void menu(void)
+void menu()
 {
   int shapeId = glutCreateMenu(shapeMenu);
 

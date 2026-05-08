@@ -3,9 +3,9 @@
 /*
 ** メニューの作成
 */
-extern void menu(void);
+extern void menu();
 
 /*
 **図形表示
 */
-extern void showShape(void);
+extern void showShape();

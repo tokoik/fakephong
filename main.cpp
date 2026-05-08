@@ -122,7 +122,7 @@ static void makeTexture(unsigned char *t, int w, int h)
 /*
 ** 初期化
 */
-static void init(void)
+static void init()
 {
   /* テクスチャの読み込みに使う配列 */
   static GLubyte texture[TEXHEIGHT * TEXWIDTH * 3];
@@ -175,7 +175,7 @@ static void init(void)
 /*
 ** シーンの描画
 */
-static void scene(void)
+static void scene()
 {
   /* 鏡面反射成分をテクスチャマッピングするときの鏡面反射係数 */
   static const GLfloat knone[] = { 0.0, 0.0, 0.0, 1.0 };
@@ -214,7 +214,7 @@ static void scene(void)
 /* アニメーションのサイクル */
 #define FRAMES 360
 
-static void display(void)
+static void display()
 {
   /* フレーム数をカウントして時間として使う */
   static int frame = 0;                      /* フレーム数　　　　　　　 */
@@ -262,7 +262,7 @@ static void resize(int w, int h)
   gluPerspective(30.0, (GLdouble)w / (GLdouble)h, 1.0, 100.0);
 }
 
-static void idle(void)
+static void idle()
 {
   /* 画面の描き替え */
   glutPostRedisplay();
